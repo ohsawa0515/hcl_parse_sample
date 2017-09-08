@@ -20,25 +20,36 @@ type Variables struct {
 
 func main() {
 	log.Println("--- Parsing HCL ---")
-	tfvars, err := ioutil.ReadFile("./variables.tfvars")
+	d, err := ioutil.ReadFile("./variables.tfvars")
 	if err != nil {
 		log.Fatal(err)
 	}
-	varables := Variables{}
-	hcl.Unmarshal(tfvars, &varables)
+	fmt.Println(string(d))
 
-	log.Printf("foo: %s\n", varables.Foo)
-	log.Printf("xyz: %s\n", varables.Xyz)
-	log.Printf("somelist: %v\n", varables.Somelist)
-	log.Printf("somemap: %v\n", varables.Somemap)
+	variables := Variables{}
+	hcl.Unmarshal(d, &variables)
+
+	log.Println("--- Operate the elements ---")
+
+	log.Printf("foo: %s\n", variables.Foo)
+	log.Printf("xyz: %s\n", variables.Xyz)
+	log.Printf("somelist: %v\n", variables.Somelist)
+	log.Printf("somemap: %v\n", variables.Somemap)
+
+	log.Println("variables.Foo = \"baz\"")
+	variables.Foo = "baz"
+
+	log.Println("variables.Xyz = \"def\"")
+	variables.Xyz = "def"
+
+	log.Println("variables.Somelist = append(variables.Somelist, \"three\")")
+	variables.Somelist = append(variables.Somelist, "three")
+
+	log.Println("variables.Somemap[\"quux\"] = \"corge\"")
+	variables.Somemap["quux"] = "corge"
 
 	log.Println("--- Generate HCL ---")
-	varables.Foo = "baz"
-	varables.Xyz = "def"
-	varables.Somelist = append(varables.Somelist, "three")
-	varables.Somemap["quux"] = "corge"
-
-	b, err := json.Marshal(varables)
+	b, err := json.Marshal(variables)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
