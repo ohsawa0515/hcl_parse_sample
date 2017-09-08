@@ -1,6 +1,5 @@
 # hcl_parse_sample
-Sample scripts to parse HashiCorp Configuration Language (HCL).
-
+Sample scripts to parse and generate HashiCorp Configuration Language (HCL).
 
 ```console
 $ go get -u github.com/golang/dep/cmd/dep
